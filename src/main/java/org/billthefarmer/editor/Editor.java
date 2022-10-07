@@ -88,13 +88,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 
 import java.lang.ref.WeakReference;
 
@@ -150,7 +147,7 @@ public class Editor extends Activity
     public final static String TEXT_WILD = "text/*";
 
     public final static Pattern PATTERN_CHARS =
-        Pattern.compile("[\\(\\)\\[\\]\\{\\}\\<\\>\"'`]");
+        Pattern.compile("[()\\[\\]{}<\\>\"'`]");
     public final static String BRACKET_CHARS = "([{<";
 
     public final static String HTML_HEAD =
@@ -198,11 +195,11 @@ public class Editor extends Activity
          "set|signed|sizeof|static|strictfp|struct|subscript|super|" +
          "switch|synchronized|template|th(en|is|rows?)|transient|" +
          "true|try|type(alias|def|id|name|of)?|un(ion|owned|signed)|" +
-         "using|va(l|r)|virtual|void|volatile|weak|wh(en|ere|ile)|willset|" +
+         "using|va([lr])|virtual|void|volatile|weak|wh(en|ere|ile)|willset|" +
          "with|yield)\\b", Pattern.MULTILINE);
 
     public final static Pattern TYPES = Pattern.compile
-        ("\\b(j?bool(ean)?|(u|j)?(byte|char|double|float|int(eger)?|" +
+        ("\\b(j?bool(ean)?|([uj])?(byte|char|double|float|int(eger)?|" +
          "long|short))\\b", Pattern.MULTILINE);
 
     public final static Pattern ANNOTATION =
@@ -223,7 +220,7 @@ public class Editor extends Activity
         ("[+-=:;<>|!%^&*/?]+", Pattern.MULTILINE);
 
     public final static Pattern NUMBER = Pattern.compile
-        ("\\b\\d+(\\.\\d*)?(e(\\+|\\-)?\\d+)?\\b",
+        ("\\b\\d+(\\.\\d*)?(e([+\\-])?\\d+)?\\b",
          Pattern.MULTILINE);
 
     public final static Pattern QUOTED = Pattern.compile
@@ -235,20 +232,20 @@ public class Editor extends Activity
 
     public final static Pattern HTML_TAGS = Pattern.compile
         ("\\b(html|base|head|link|meta|style|title|body|address|article|" +
-         "aside|footer|header|h\\d|hgroup|main|nav|section|blockquote|dd|" +
-         "dir|div|dl|dt|figcaption|figure|hr|li|main|ol|p|pre|ul|a|abbr|" +
+         "aside|footer|header|h\\d|hgroup|nav|section|blockquote|dd" +
+         "|div|dl|dt|figcaption|figure|hr|li|main|ol|p|pre|ul|a|abbr|" +
          "b|bdi|bdo|br|cite|code|data|dfn|em|i|kbd|mark|q|rb|rp|rt|rtc|" +
          "ruby|s|samp|small|span|strong|sub|sup|time|tt|u|var|wbr|area|" +
-         "audio|img|map|track|video|applet|embed|iframe|noembed|object|" +
+         "audio|img|map|track|video|embed|iframe|object|" +
          "param|picture|source|canvas|noscript|script|del|ins|caption|" +
          "col|colgroup|table|tbody|td|tfoot|th|thead|tr|button|datalist|" +
          "fieldset|form|input|label|legend|meter|optgroup|option|output|" +
-         "progress|select|textarea|details|dialog|menu|menuitem|summary|" +
-         "content|element|shadow|slot|template|acronym|applet|basefont|" +
+         "progress|select|textarea|details|dialog|menu|menuitem|summary" +
+         "|shadow|slot|template|acronym|applet|basefont|" +
          "bgsound|big|blink|center|command|content|dir|element|font|" +
          "frame|frameset|image|isindex|keygen|listing|marquee|menuitem|" +
-         "multicol|nextid|nobr|noembed|noframes|plaintext|shadow|spacer|" +
-         "strike|tt|xmp|doctype)\\b",
+         "multicol|nextid|nobr|noembed|noframes|plaintext|spacer|" +
+         "strike|xmp|doctype)\\b",
          Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
 
     public final static Pattern HTML_ATTRS = Pattern.compile
@@ -535,9 +532,7 @@ public class Editor extends Activity
         case Intent.ACTION_SEND:
             if (savedInstanceState == null)
             {
-                // Get uri
                 uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-                // Get text
                 String text = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (uri != null)
                     readFile(uri);
