@@ -147,7 +147,7 @@ public class Editor extends Activity
     public final static String TEXT_WILD = "text/*";
 
     public final static Pattern PATTERN_CHARS =
-        Pattern.compile("[()\\[\\]{}<\\>\"'`]");
+        Pattern.compile("[()\\[\\]{}<>\"'`]");
     public final static String BRACKET_CHARS = "([{<";
 
     public final static String HTML_HEAD =
@@ -501,7 +501,7 @@ public class Editor extends Activity
         getActionBar().setDisplayShowCustomEnabled(true);
         customView = (TextView) getActionBar().getCustomView();
 
-        updateWordCount = () -> wordCountText();
+        updateWordCount = this::wordCountText;
 
         if (savedInstanceState != null)
             edit = savedInstanceState.getBoolean(EDIT);
@@ -792,9 +792,7 @@ public class Editor extends Activity
             alertDialog(R.string.appName, R.string.changedReload,
                         R.string.reload, R.string.cancel, (dialog, id) ->
         {
-            switch (id)
-            {
-            case DialogInterface.BUTTON_POSITIVE:
+            if (id == DialogInterface.BUTTON_POSITIVE) {
                 readFile(uri);
             }
         });
@@ -885,10 +883,7 @@ public class Editor extends Activity
         }
 
         // Show find all item
-        if (menu.findItem(R.id.search).isActionViewExpanded())
-            menu.findItem(R.id.findAll).setVisible(true);
-        else
-            menu.findItem(R.id.findAll).setVisible(false);
+        menu.findItem(R.id.findAll).setVisible(menu.findItem(R.id.search).isActionViewExpanded());
 
         menu.findItem(R.id.edit).setVisible(!edit);
         menu.findItem(R.id.view).setVisible(edit);
@@ -955,9 +950,7 @@ public class Editor extends Activity
         sub.clear();
         // Add charsets contained in both sets
         sub.add(Menu.NONE, R.id.charsetItem, Menu.NONE, R.string.detect);
-        Iterator<String> iterator = keySet.iterator();
-        while (iterator.hasNext())
-            sub.add(Menu.NONE, R.id.charsetItem, Menu.NONE, iterator.next());
+        for (String s : keySet) sub.add(Menu.NONE, R.id.charsetItem, Menu.NONE, s);
 
         // Get a list of recent files
         List<Long> list = new ArrayList<>();
@@ -1538,9 +1531,7 @@ public class Editor extends Activity
     // clearList
     private void clearList()
     {
-        for (String path : pathMap.keySet())
-            removeList.add(path);
-
+        removeList.addAll(pathMap.keySet());
         pathMap.clear();
     }
 
@@ -1743,7 +1734,6 @@ public class Editor extends Activity
     }
 
     // aboutClicked
-    @SuppressWarnings("deprecation")
     private void aboutClicked()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -1839,11 +1829,9 @@ public class Editor extends Activity
     {
         // Get list of files
         List<File> fileList = getList(dir);
-        if (fileList == null)
-            return;
 
         // Get list of folders
-        List<String> dirList = new ArrayList<String>();
+        List<String> dirList = new ArrayList<>();
         dirList.add(File.separator);
         dirList.addAll(Uri.fromFile(dir).getPathSegments());
 
@@ -1883,14 +1871,14 @@ public class Editor extends Activity
     // getList
     private List<File> getList(File dir)
     {
-        List<File> list = null;
+        List<File> list;
         File[] files = dir.listFiles();
         // Check files
         if (files == null)
         {
             // Create a list with just the parent folder and the
             // external storage folder
-            list = new ArrayList<File>();
+            list = new ArrayList<>();
             if (dir.getParentFile() == null)
                 list.add(dir);
 
@@ -1905,7 +1893,7 @@ public class Editor extends Activity
         // Sort the files
         Arrays.sort(files);
         // Create a list
-        list = new ArrayList<File>(Arrays.asList(files));
+        list = new ArrayList<>(Arrays.asList(files));
         // Remove hidden files
         Iterator<File> iterator = list.iterator();
         while (iterator.hasNext())
@@ -1976,9 +1964,7 @@ public class Editor extends Activity
 
         // Scroll to the end
         scroll.postDelayed(() ->
-        {
-            scroll.fullScroll(View.FOCUS_RIGHT);
-        }, POSITION_DELAY);
+                scroll.fullScroll(View.FOCUS_RIGHT), POSITION_DELAY);
     }
 
     // onRequestPermissionsResult
@@ -2037,7 +2023,7 @@ public class Editor extends Activity
             }
         }
 
-        long size = 0;
+        long size;
         if (CONTENT.equalsIgnoreCase(uri.getScheme()))
             size = FileUtils.getSize(this, uri, null, null);
 
@@ -2159,11 +2145,8 @@ public class Editor extends Activity
             alertDialog(R.string.appName, R.string.changedOverwrite,
                         R.string.overwrite, R.string.cancel, (dialog, id) ->
         {
-            switch (id)
-            {
-            case DialogInterface.BUTTON_POSITIVE:
+            if (id == DialogInterface.BUTTON_POSITIVE) {
                 saveFile(file);
-                break;
             }
         });
 
@@ -2201,7 +2184,6 @@ public class Editor extends Activity
         {
             alertDialog(R.string.appName, e.getMessage(), R.string.ok);
             e.printStackTrace();
-            return;
         }
     }
 
@@ -2301,7 +2283,7 @@ public class Editor extends Activity
                 if (textView != null && syntax != NO_SYNTAX)
                 {
                     if (updateHighlight == null)
-                        updateHighlight = () -> highlightText();
+                        updateHighlight = this::highlightText;
 
                     textView.removeCallbacks(updateHighlight);
                     textView.postDelayed(updateHighlight, UPDATE_DELAY);
@@ -2348,7 +2330,7 @@ public class Editor extends Activity
         Editable editable = textView.getEditableText();
 
         // Get current spans
-        ForegroundColorSpan spans[] =
+        ForegroundColorSpan[] spans =
             editable.getSpans(start, end, ForegroundColorSpan.class);
         // Remove spans
         for (ForegroundColorSpan span: spans)
@@ -3107,17 +3089,15 @@ public class Editor extends Activity
     private class QueryTextListener
         implements SearchView.OnQueryTextListener
     {
-        private BackgroundColorSpan span = new
+        private final BackgroundColorSpan span = new
             BackgroundColorSpan(Color.YELLOW);
         private Editable editable;
         private Matcher matcher;
-        private Pattern pattern;
         private int index;
         private int height;
 
         // onQueryTextChange
         @Override
-        @SuppressWarnings("deprecation")
         public boolean onQueryTextChange(String newText)
         {
             // Use regex search and spannable for highlighting
@@ -3135,7 +3115,7 @@ public class Editor extends Activity
             // Check pattern
             try
             {
-                pattern = Pattern.compile(newText, Pattern.MULTILINE);
+                Pattern pattern = Pattern.compile(newText, Pattern.MULTILINE);
                 matcher = pattern.matcher(editable);
             }
 
@@ -3252,8 +3232,7 @@ public class Editor extends Activity
     private static class FindTask
             extends AsyncTask<String, Void, List<File>>
     {
-        private WeakReference<Editor> editorWeakReference;
-        private Pattern pattern;
+        private final WeakReference<Editor> editorWeakReference;
         private String search;
 
         // FindTask
@@ -3274,6 +3253,7 @@ public class Editor extends Activity
 
             search = params[0];
             // Check pattern
+            Pattern pattern;
             try
             {
                 pattern = Pattern.compile(search, Pattern.MULTILINE);
@@ -3357,7 +3337,7 @@ public class Editor extends Activity
     private static class ReadTask
         extends AsyncTask<Uri, Void, CharSequence>
     {
-        private WeakReference<Editor> editorWeakReference;
+        private final WeakReference<Editor> editorWeakReference;
 
         public ReadTask(Editor editor)
         {
@@ -3385,7 +3365,7 @@ public class Editor extends Activity
                  (editor.getContentResolver().openInputStream(uris[0])))
             {
                 // Create reader
-                BufferedReader reader = null;
+                BufferedReader reader;
                 if (editor.match.equals(editor.getString(R.string.detect)))
                 {
                     // Detect charset, using UTF-8 hint
