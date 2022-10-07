@@ -23,8 +23,6 @@ package org.billthefarmer.editor;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +47,8 @@ public class FileAdapter extends BaseAdapter
 
     private final static long LARGE = 262144;
 
-    private LayoutInflater inflater;
-    private List<File> files;
+    private final LayoutInflater inflater;
+    private final List<File> files;
 
     private int fileId;
     private int audioId;

@@ -350,7 +350,9 @@ public class FileUtils
             }
         }
 
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -391,7 +393,9 @@ public class FileUtils
             }
         }
 
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return 0;
     }
@@ -433,7 +437,9 @@ public class FileUtils
             }
         }
 
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return null;
     }
@@ -523,7 +529,7 @@ public class FileUtils
                     final Uri contentUri =
                         ContentUris
                         .withAppendedId(Uri.parse("content://downloads/public_downloads"),
-                                        Long.valueOf(id));
+                                        Long.parseLong(id));
 
                     return getDataColumn(context, contentUri, null, null);
                 }
@@ -650,7 +656,7 @@ public class FileUtils
                 }
             }
         }
-        return String.valueOf(dec.format(fileSize) + suffix);
+        return dec.format(fileSize) + suffix;
     }
 
     /**
