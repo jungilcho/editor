@@ -35,28 +35,32 @@ public class Shortcut extends Activity
 
     // onCreate
     @Override
-    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setResult(RESULT_OK, getIntent1());
+        finish();
+    }
 
-        // Create the shortcut intent
+    private Intent getIntent1 () {
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, getShortcut());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.newFile));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmap());
+        return intent;
+    }
+
+    private Bitmap getBitmap() {
+        BitmapDrawable drawable = (BitmapDrawable) getResources()
+            .getDrawable(R.drawable.ic_launcher);
+        return drawable.getBitmap();
+    }
+
+    private Intent getShortcut() {
         Intent shortcut = new
             Intent(this, Editor.class);
         shortcut.setAction(Editor.OPEN_NEW);
         shortcut.addCategory(Intent.CATEGORY_DEFAULT);
-
-        BitmapDrawable drawable = (BitmapDrawable) getResources()
-            .getDrawable(R.drawable.ic_launcher);
-        Bitmap bitmap = drawable.getBitmap();
-
-        // Create the shortcut
-        Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcut);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.newFile));
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, bitmap);
-
-        setResult(RESULT_OK, intent);
-        finish();
+        return shortcut;
     }
 }
