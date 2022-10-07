@@ -243,7 +243,7 @@ public class Editor extends Activity
          "progress|select|textarea|details|dialog|menu|menuitem|summary" +
          "|shadow|slot|template|acronym|applet|basefont|" +
          "bgsound|big|blink|center|command|content|dir|element|font|" +
-         "frame|frameset|image|isindex|keygen|listing|marquee|menuitem|" +
+         "frame|frameset|image|isindex|keygen|listing|marquee|" +
          "multicol|nextid|nobr|noembed|noframes|plaintext|spacer|" +
          "strike|xmp|doctype)\\b",
          Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
@@ -1559,7 +1559,7 @@ public class Editor extends Activity
     {
         String text = textView.getText().toString();
 
-        // Use commonmark
+        // Use common mark
         Parser parser = Parser.builder().build();
         Node document = parser.parse(text);
         HtmlRenderer renderer = HtmlRenderer.builder().build();
