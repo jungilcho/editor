@@ -323,7 +323,7 @@ public class Editor extends Activity
         ("(^\\*+ +.+$)|(^#\\+.+$)", Pattern.MULTILINE);
 
     public final static Pattern ORG_LINK = Pattern.compile
-        ("\\[\\[.*?\\]\\]", Pattern.MULTILINE);
+        ("\\[\\[.*?]]", Pattern.MULTILINE);
 
     public final static Pattern ORG_EMPH = Pattern.compile
         ("(([*~/+=]+)\\b(\\w| )+?\\b\\2)|(\\b(_{1,2})(\\w| )+?\\5\\b)",
@@ -336,8 +336,8 @@ public class Editor extends Activity
         ("(^.+\\s+-+$)|(^.+\\s+=+$)|(^#+ +.+$)", Pattern.MULTILINE);
 
     public final static Pattern MD_LINK = Pattern.compile
-        ("(\\!?\\[.+\\] *\\(.+\\))|(!?\\[.+\\] *\\[.+\\])|" +
-         "( *\\[.+\\]: +.+$)", Pattern.MULTILINE);
+        ("(!?\\[.+] *\\(.+\\))|(!?\\[.+] *\\[.+])|" +
+         "( *\\[.+]: +.+$)", Pattern.MULTILINE);
 
     public final static Pattern MD_EMPH = Pattern.compile
         ("(([*~]{1,2})\\b(\\w| )+?\\b\\2)|(\\b(_{1,2})(\\w| )+?\\5\\b)",
@@ -347,7 +347,7 @@ public class Editor extends Activity
         ("(^ {4,}.+$)|(`.+?`)", Pattern.MULTILINE);
 
     public final static Pattern SH_VAR = Pattern.compile
-        ("(\\$\\b\\w+\\b)|(\\$\\{.+?\\})|(\\$\\(.+?\\))", Pattern.MULTILINE);
+        ("(\\$\\b\\w+\\b)|(\\$\\{.+?})|(\\$\\(.+?\\))", Pattern.MULTILINE);
 
     public final static Pattern SH_COMMENT = Pattern.compile
         ("#.*$", Pattern.MULTILINE);
