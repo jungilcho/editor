@@ -116,293 +116,6 @@ public class Editor extends Activity
 {
     public final static String TAG = "Editor";
 
-    public final static String PATH = "path";
-    public final static String EDIT = "edit";
-    public final static String MATCH = "match";
-    public final static String CHANGED = "changed";
-    public final static String CONTENT = "content";
-    public final static String MODIFIED = "modified";
-
-    public final static String PREF_FILE = "pref_file";
-    public final static String PREF_HIGHLIGHT = "pref_highlight";
-    public final static String PREF_PATHS = "pref_paths";
-    public final static String PREF_SAVE = "pref_save";
-    public final static String PREF_VIEW = "pref_view";
-    public final static String PREF_SIZE = "pref_size";
-    public final static String PREF_SUGGEST = "pref_suggest";
-    public final static String PREF_THEME = "pref_theme";
-    public final static String PREF_TYPE = "pref_type";
-    public final static String PREF_WRAP = "pref_wrap";
-
-    public final static String DOCUMENTS = "Documents";
-    public final static String FOLDER = "Folder:  ";
-    public final static String UTF_8 = "UTF-8";
-
-    public final static String NEW_FILE = "Untitled.txt";
-    public final static String EDIT_FILE = "Editor.txt";
-    public final static String HTML_FILE = "Editor.html";
-
-    public final static String TEXT_HTML = "text/html";
-    public final static String TEXT_PLAIN = "text/plain";
-    public final static String TEXT_WILD = "text/*";
-
-    public final static Pattern PATTERN_CHARS =
-        Pattern.compile("[()\\[\\]{}<>\"'`]");
-    public final static String BRACKET_CHARS = "([{<";
-
-    public final static String HTML_HEAD =
-        "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n" +
-        "<meta name=\"viewport\" content=\"width=device-width, " +
-        "initial-scale=1.0\">\n</head>\n<body>\n";
-    public final static String HTML_TAIL = "\n</body>\n</html>\n";
-    public final static String FILE_PROVIDER =
-        "org.billthefarmer.editor.fileprovider";
-    public final static String OPEN_NEW =
-        "org.billthefarmer.editor.OPEN_NEW";
-
-    public final static String CC_EXT =
-        "\\.(c(c|pp|xx|\\+\\+)?|go|h|java|js|kt|m|py|swift)";
-
-    public final static String HTML_EXT =
-        "\\.html?";
-
-    public final static String CSS_EXT =
-        "\\.css?";
-
-    public final static String ORG_EXT =
-        "\\.org";
-
-    public final static String MD_EXT =
-        "\\.md";
-
-    public final static String SH_EXT =
-        "\\.sh";
-
-    // Syntax patterns
-    public final static Pattern KEYWORDS = Pattern.compile
-        ("\\b(abstract|and|arguments|as(m|sert|sociativity)?|auto|break|" +
-         "case|catch|chan|char|class|con(st|tinue|venience)|continue|" +
-         "de(bugger|f|fault|fer|in|init|l|lete)|didset|do(ne)?|dynamic" +
-         "(type)?|el(if|se)|enum|esac|eval|ex(cept|ec|plicit|port|" +
-         "tends|tension|tern)|fal(lthrough|se)|fi(nal|nally)?|for|" +
-         "friend|from|fun(c(tion)?)?|get|global|go(to)?|if|" +
-         "im(plements|port)|in(fix|it|line|out|stanceof|terface|" +
-         "ternal)?|is|lambda|lazy|left|let|local|map|mut(able|ating)|" +
-         "namespace|native|new|nil|none|nonmutating|not|null|" +
-         "operator|optional|or|override|package|pass|postfix|" +
-         "pre(cedence|fix)|print|private|prot(ected|ocol)|public|" +
-         "raise|range|register|required|return|right|select|self|" +
-         "set|signed|sizeof|static|strictfp|struct|subscript|super|" +
-         "switch|synchronized|template|th(en|is|rows?)|transient|" +
-         "true|try|type(alias|def|id|name|of)?|un(ion|owned|signed)|" +
-         "using|va([lr])|virtual|void|volatile|weak|wh(en|ere|ile)|willset|" +
-         "with|yield)\\b", Pattern.MULTILINE);
-
-    public final static Pattern TYPES = Pattern.compile
-        ("\\b(j?bool(ean)?|([uj])?(byte|char|double|float|int(eger)?|" +
-         "long|short))\\b", Pattern.MULTILINE);
-
-    public final static Pattern ANNOTATION =
-        Pattern.compile("@\\b[A-Za-z]+\\b", Pattern.MULTILINE);
-
-    public final static Pattern CC_COMMENT = Pattern.compile
-        ("//.*$|(\"(?:\\\\[^\"]|\\\\\"|.)*?\")|(?s)/\\*.*?\\*/",
-         Pattern.MULTILINE);
-
-    public final static Pattern CLASS = Pattern.compile
-        ("\\b[A-Z][A-Za-z0-9_]+\\b", Pattern.MULTILINE);
-
-    public final static Pattern CONSTANT = Pattern.compile
-        ("\\b(([A-Z][A-Z0-9_]+)|(k[A-Z][A-Za-z0-9]+))\\b",
-         Pattern.MULTILINE);
-
-    public final static Pattern OPERATOR = Pattern.compile
-        ("[+-=:;<>|!%^&*/?]+", Pattern.MULTILINE);
-
-    public final static Pattern NUMBER = Pattern.compile
-        ("\\b\\d+(\\.\\d*)?(e([+\\-])?\\d+)?\\b",
-         Pattern.MULTILINE);
-
-    public final static Pattern QUOTED = Pattern.compile
-        // "'([^\\\\']+|\\\\([btnfr\"'\\\\]|" +
-        // "[0-3]?[0-7]{1,2}|u[0-9a-fA-F]{4}))*'|" +
-        ("\"([^\\\\\"]+|\\\\([btnfr\"'\\\\]|" +
-         "[0-3]?[0-7]{1,2}|u[0-9a-fA-F]{4}))*\"",
-         Pattern.MULTILINE);
-
-    public final static Pattern HTML_TAGS = Pattern.compile
-        ("\\b(html|base|head|link|meta|style|title|body|address|article|" +
-         "aside|footer|header|h\\d|hgroup|nav|section|blockquote|dd" +
-         "|div|dl|dt|figcaption|figure|hr|li|main|ol|p|pre|ul|a|abbr|" +
-         "b|bdi|bdo|br|cite|code|data|dfn|em|i|kbd|mark|q|rb|rp|rt|rtc|" +
-         "ruby|s|samp|small|span|strong|sub|sup|time|tt|u|var|wbr|area|" +
-         "audio|img|map|track|video|embed|iframe|object|" +
-         "param|picture|source|canvas|noscript|script|del|ins|caption|" +
-         "col|colgroup|table|tbody|td|tfoot|th|thead|tr|button|datalist|" +
-         "fieldset|form|input|label|legend|meter|optgroup|option|output|" +
-         "progress|select|textarea|details|dialog|menu|menuitem|summary" +
-         "|shadow|slot|template|acronym|applet|basefont|" +
-         "bgsound|big|blink|center|command|content|dir|element|font|" +
-         "frame|frameset|image|isindex|keygen|listing|marquee|" +
-         "multicol|nextid|nobr|noembed|noframes|plaintext|spacer|" +
-         "strike|xmp|doctype)\\b",
-         Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
-
-    public final static Pattern HTML_ATTRS = Pattern.compile
-        ("\\b(accept|accesskey|action|align|allow|alt|async|" +
-         "auto(capitalize|complete|focus|play)|background|" +
-         "bgcolor|border|buffered|challenge|charset|checked|cite|" +
-         "class|code(base)?|color|cols|colspan|content(" +
-         "editable)?|contextmenu|controls|coords|crossorigin|" +
-         "csp|data|datetime|decoding|def(ault|er)|dir|dirname|" +
-         "disabled|download|draggable|dropzone|enctype|enterkeyhint|" +
-         "equiv|for|form(action|novalidate)?|headers|height|" +
-         "hidden|high|href(lang)?|http|icon|id|importance|" +
-         "inputmode|integrity|intrinsicsize|ismap|itemprop|keytype|" +
-         "kind|label|lang|language|list|loading|loop|low|manifest|" +
-         "max|maxlength|media|method|min|minlength|multiple|muted|" +
-         "name|novalidate|open|optimum|pattern|ping|placeholder|" +
-         "poster|preload|property|radiogroup|readonly|referrerpolicy|" +
-         "rel|required|reversed|rows|rowspan|sandbox|scope|scoped|" +
-         "selected|shape|size|sizes|slot|span|spellcheck|src|srcdoc|" +
-         "srclang|srcset|start|step|style|summary|tabindex|target|" +
-         "title|translate|type|usemap|value|width|wrap)\\b",
-         Pattern.MULTILINE);
-
-    public final static Pattern HTML_COMMENT =
-        Pattern.compile("<!--.*?-->", Pattern.MULTILINE);
-
-    public final static Pattern CSS_STYLES = Pattern.compile
-        ("\\b(action|active|additive|adjust|after|align|all|alternates|" +
-         "animation|annotation|area|areas|as|asian|attachment|attr|" +
-         "auto|backdrop|backface|background|basis|before|behavior|" +
-         "bezier|bidi|blend|block|blur|border|both|bottom|box|break|" +
-         "brightness|calc|caps|caption|caret|cells|center|ch|change|" +
-         "character|charset|checked|child|circle|clamp|clear|clip|" +
-         "cm|collapse|color|column|columns|combine|composite|conic|" +
-         "content|contrast|count|counter|counters|cross|cubic|cue|" +
-         "cursor|decoration|default|deg|delay|dir|direction|" +
-         "disabled|display|dpcm|dpi|dppx|drop|duration|east|element|" +
-         "ellipse|em|emphasis|empty|enabled|end|env|events|ex|face|" +
-         "fade|fallback|family|feature|fill|filter|first|fit|flex|" +
-         "float|flow|focus|font|format|forms|fr|frames|fullscreen|" +
-         "function|gap|grad|gradient|grayscale|grid|grow|hanging|" +
-         "height|historical|hover|hsl|hsla|hue|hyphens|hz|image|import|" +
-         "in|increment|indent|indeterminate|index|inherit|initial|" +
-         "inline|inset|inside|invalid|invert|isolation|items|" +
-         "iteration|justify|khz|kerning|keyframes|lang|language|" +
-         "last|layout|leader|left|letter|ligatures|line|linear|link|" +
-         "list|local|margin|mask|matrix|matrix3d|max|media|min|" +
-         "minmax|mix|mm|mode|ms|name|namespace|negative|none|not|nth|" +
-         "numeric|object|of|offset|only|opacity|optical|optional|" +
-         "order|orientation|origin|ornaments|orphans|out|outline|" +
-         "outset|outside|overflow|override|pad|padding|page|path|pc|" +
-         "perspective|place|placeholder|play|pointer|polygon|" +
-         "position|prefix|property|pt|punctuation|px|q|quotes|rad|" +
-         "radial|radius|range|read|rect|relative|rem|rendering|repeat|" +
-         "repeating|required|reset|resize|revert|rgb|rgba|right|" +
-         "root|rotate|rotate3d|rotatex|rotatey|rotatez|row|rows|" +
-         "rule|s|saturate|scale|scale3d|scalex|scaley|scalez|scope|" +
-         "scroll|scrollbar|selection|self|sepia|set|settings|shadow|" +
-         "shape|shrink|side|size|sizing|skew|skewx|skewy|slice|" +
-         "slotted|snap|source|space|spacing|span|speak|src|start|" +
-         "state|static|steps|stop|stretch|style|styleset|stylistic|suffix|" +
-         "supports|swash|symbols|synthesis|system|tab|table|target|" +
-         "template|text|threshold|timing|top|touch|transform|" +
-         "transition|translate|translate3d|translatex|translatey|" +
-         "translatez|turn|type|underline|unicode|unset|upright|url|" +
-         "user|valid|values|var|variant|variation|vertical|vh|" +
-         "viewport|visibility|visited|vmax|vmin|vw|weight|white|" +
-         "widows|width|will|word|wrap|write|writing|x|y|z|zoom)\\b",
-         Pattern.MULTILINE);
-
-    public final static Pattern CSS_HEX = Pattern.compile
-        ("#\\b[A-Fa-f0-9]+\\b", Pattern.MULTILINE);
-
-    public final static Pattern ORG_HEADER = Pattern.compile
-        ("(^\\*+ +.+$)|(^#\\+.+$)", Pattern.MULTILINE);
-
-    public final static Pattern ORG_LINK = Pattern.compile
-        ("\\[\\[.*?]]", Pattern.MULTILINE);
-
-    public final static Pattern ORG_EMPH = Pattern.compile
-        ("(([*~/+=]+)\\b(\\w| )+?\\b\\2)|(\\b(_{1,2})(\\w| )+?\\5\\b)",
-         Pattern.MULTILINE);
-
-    public final static Pattern ORG_COMMENT = Pattern.compile
-        ("(^# .*$)|(@@.*?@@)", Pattern.MULTILINE);
-
-    public final static Pattern MD_HEADER = Pattern.compile
-        ("(^.+\\s+-+$)|(^.+\\s+=+$)|(^#+ +.+$)", Pattern.MULTILINE);
-
-    public final static Pattern MD_LINK = Pattern.compile
-        ("(!?\\[.+] *\\(.+\\))|(!?\\[.+] *\\[.+])|" +
-         "( *\\[.+]: +.+$)", Pattern.MULTILINE);
-
-    public final static Pattern MD_EMPH = Pattern.compile
-        ("(([*~]{1,2})\\b(\\w| )+?\\b\\2)|(\\b(_{1,2})(\\w| )+?\\5\\b)",
-         Pattern.MULTILINE);
-
-    public final static Pattern MD_CODE = Pattern.compile
-        ("(^ {4,}.+$)|(`.+?`)", Pattern.MULTILINE);
-
-    public final static Pattern SH_VAR = Pattern.compile
-        ("(\\$\\b\\w+\\b)|(\\$\\{.+?})|(\\$\\(.+?\\))", Pattern.MULTILINE);
-
-    public final static Pattern SH_COMMENT = Pattern.compile
-        ("#.*$", Pattern.MULTILINE);
-
-    public final static Pattern MODE_PATTERN = Pattern.compile
-        ("^\\S+\\s+ed:(.+)$", Pattern.MULTILINE);
-    public final static Pattern OPTION_PATTERN = Pattern.compile
-        ("(\\s+(no)?(vw|ww|sg|cs|hs|th|ts|tf)(:\\w)?)", Pattern.MULTILINE);
-    public final static Pattern WORD_PATTERN = Pattern.compile
-        ("\\w+", Pattern.MULTILINE);
-
-    private final static double KEYBOARD_RATIO = 0.25;
-
-    private final static int LAST_SIZE = 256;
-    private final static int MENU_SIZE = 192;
-    private final static int FIRST_SIZE = 256;
-    private final static int TOO_LARGE = 524288;
-    private final static int FOLDER_OFFSET = 0x7d000000;
-    private final static int POSITION_DELAY = 128;
-    private final static int UPDATE_DELAY = 128;
-    private final static int FIND_DELAY = 128;
-    private final static int MAX_PATHS = 10;
-
-    private final static int GET_TEXT = 0;
-
-    private final static int REQUEST_READ = 1;
-    private final static int REQUEST_SAVE = 2;
-    private final static int REQUEST_OPEN = 3;
-
-    private final static int OPEN_DOCUMENT   = 1;
-    private final static int CREATE_DOCUMENT = 2;
-
-    private final static int LIGHT = 1;
-    private final static int DARK  = 2;
-    private final static int BLACK = 3;
-    private final static int RETRO = 4;
-
-    private final static int TINY   = 8;
-    private final static int SMALL  = 12;
-    private final static int MEDIUM = 18;
-    private final static int LARGE  = 24;
-    private final static int HUGE  =  32;
-
-    private final static int NORMAL = 1;
-    private final static int MONO   = 2;
-
-    private final static int NO_SYNTAX   = 0;
-    private final static int CC_SYNTAX   = 1;
-    private final static int HTML_SYNTAX = 2;
-    private final static int CSS_SYNTAX  = 3;
-    private final static int ORG_SYNTAX  = 4;
-    private final static int MD_SYNTAX   = 5;
-    private final static int SH_SYNTAX   = 6;
-    private final static int DEF_SYNTAX  = 7;
-
     private Uri uri;
     private File file;
     private String path;
@@ -434,9 +147,9 @@ public class Editor extends Activity
 
     private long modified;
 
-    private int theme = LIGHT;
-    private int size = MEDIUM;
-    private int type = MONO;
+    private int theme = Constants.LIGHT;
+    private int size = Constants.MEDIUM;
+    private int type = Constants.MONO;
 
     private int syntax;
 
@@ -449,17 +162,9 @@ public class Editor extends Activity
         SharedPreferences preferences =
             PreferenceManager.getDefaultSharedPreferences(this);
 
-        save = preferences.getBoolean(PREF_SAVE, false);
-        view = preferences.getBoolean(PREF_VIEW, true);
-        wrap = preferences.getBoolean(PREF_WRAP, false);
-        suggest = preferences.getBoolean(PREF_SUGGEST, true);
-        highlight = preferences.getBoolean(PREF_HIGHLIGHT, false);
+        getPreferenceValues(preferences);
 
-        theme = preferences.getInt(PREF_THEME, LIGHT);
-        size = preferences.getInt(PREF_SIZE, MEDIUM);
-        type = preferences.getInt(PREF_TYPE, MONO);
-
-        Set<String> pathSet = preferences.getStringSet(PREF_PATHS, null);
+        Set<String> pathSet = preferences.getStringSet(Constants.PREF_PATHS, null);
         pathMap = new HashMap<>();
 
         if (pathSet != null)
@@ -468,30 +173,8 @@ public class Editor extends Activity
 
         removeList = new ArrayList<>();
 
-        switch (theme)
-        {
-        case LIGHT:
-            setTheme(R.style.AppTheme);
-            break;
-
-        case DARK:
-            setTheme(R.style.AppDarkTheme);
-            break;
-
-        case BLACK:
-            setTheme(R.style.AppBlackTheme);
-            break;
-
-        case RETRO:
-            setTheme(R.style.AppRetroTheme);
-            break;
-        }
-
-        if (wrap)
-            setContentView(R.layout.wrap);
-
-        else
-            setContentView(R.layout.edit);
+        setTheme(getThemeId(theme));
+        setContentView(getLayoutType());
 
         textView = findViewById(R.id.text);
         scrollView = findViewById(R.id.vscroll);
@@ -504,8 +187,34 @@ public class Editor extends Activity
         updateWordCount = this::wordCountText;
 
         if (savedInstanceState != null)
-            edit = savedInstanceState.getBoolean(EDIT);
+            edit = savedInstanceState.getBoolean(Constants.EDIT);
 
+        setInputType();
+
+        setSizeAndTypeface(size, type);
+
+        openFile(savedInstanceState);
+
+        setListeners();
+    }
+
+    private int getLayoutType() {
+        return (wrap)? R.layout.wrap : R.layout.edit;
+    }
+
+    private void getPreferenceValues(SharedPreferences preferences) {
+        save = preferences.getBoolean(Constants.PREF_SAVE, false);
+        view = preferences.getBoolean(Constants.PREF_VIEW, true);
+        wrap = preferences.getBoolean(Constants.PREF_WRAP, false);
+        suggest = preferences.getBoolean(Constants.PREF_SUGGEST, true);
+        highlight = preferences.getBoolean(Constants.PREF_HIGHLIGHT, false);
+
+        theme = preferences.getInt(Constants.PREF_THEME, Constants.LIGHT);
+        size = preferences.getInt(Constants.PREF_SIZE, Constants.MEDIUM);
+        type = preferences.getInt(Constants.PREF_TYPE, Constants.MONO);
+    }
+
+    private void setInputType() {
         if (!edit)
             textView.setRawInputType(InputType.TYPE_NULL);
 
@@ -513,9 +222,9 @@ public class Editor extends Activity
             textView.setInputType(InputType.TYPE_CLASS_TEXT |
                                   InputType.TYPE_TEXT_FLAG_MULTI_LINE |
                                   InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+    }
 
-        setSizeAndTypeface(size, type);
-
+    private void openFile(Bundle savedInstanceState) {
         Intent intent = getIntent();
         Uri uri = intent.getData();
 
@@ -548,11 +257,11 @@ public class Editor extends Activity
             }
             break;
 
-        case OPEN_NEW:
+        case Constants.OPEN_NEW:
             if (savedInstanceState == null)
             {
                 newFile();
-                textView.postDelayed(() -> editClicked(null), UPDATE_DELAY);
+                textView.postDelayed(() -> editClicked(null), Constants.UPDATE_DELAY);
             }
             break;
 
@@ -561,11 +270,22 @@ public class Editor extends Activity
                 defaultFile();
             break;
         }
-
-        setListeners();
     }
 
-    // setListeners
+    private int getThemeId(int theme)
+    {
+        if (theme == Constants.LIGHT) {
+            return R.style.AppTheme;
+        } else if (theme == Constants.DARK) {
+            return R.style.AppDarkTheme;
+        } else if (theme == Constants.BLACK) {
+            return R.style.AppBlackTheme;
+        } else if (theme == Constants.RETRO) {
+            return R.style.AppRetroTheme;
+        }
+        return R.style.AppTheme;
+    }
+
     private void setListeners()
     {
         scaleDetector =
@@ -588,13 +308,13 @@ public class Editor extends Activity
                     if (updateHighlight != null)
                     {
                         textView.removeCallbacks(updateHighlight);
-                        textView.postDelayed(updateHighlight, UPDATE_DELAY);
+                        textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
                     }
 
                     if (updateWordCount != null)
                     {
                         textView.removeCallbacks(updateWordCount);
-                        textView.postDelayed(updateWordCount, UPDATE_DELAY);
+                        textView.postDelayed(updateWordCount, Constants.UPDATE_DELAY);
                     }
                 }
 
@@ -618,7 +338,7 @@ public class Editor extends Activity
                                 if (query != null)
                                     searchView.setQuery(query, false);
                             }
-                        }, UPDATE_DELAY);
+                        }, Constants.UPDATE_DELAY);
                     }
                 }
 
@@ -642,7 +362,7 @@ public class Editor extends Activity
                 if (updateHighlight != null)
                 {
                     textView.removeCallbacks(updateHighlight);
-                    textView.postDelayed(updateHighlight, UPDATE_DELAY);
+                    textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
                 }
             });
 
@@ -681,12 +401,12 @@ public class Editor extends Activity
 
                 // Change size and typeface temporarily as workaround for yet
                 // another obscure feature of some versions of android
-                textView.setTextSize((size == TINY)? HUGE: TINY);
+                textView.setTextSize((size == Constants.TINY)? Constants.HUGE: Constants.TINY);
                 textView.setTextSize(size);
-                textView.setTypeface((type == NORMAL)?
+                textView.setTypeface((type == Constants.NORMAL)?
                                      Typeface.MONOSPACE:
                                      Typeface.DEFAULT, Typeface.NORMAL);
-                textView.setTypeface((type == NORMAL)?
+                textView.setTypeface((type == Constants.NORMAL)?
                                      Typeface.DEFAULT:
                                      Typeface.MONOSPACE, Typeface.NORMAL);
                 // Update boolean
@@ -714,7 +434,7 @@ public class Editor extends Activity
 
                         boolean shown = (((rootHeight - height) /
                                          (double) rootHeight) >
-                                         KEYBOARD_RATIO);
+                                         Constants.KEYBOARD_RATIO);
 
                         if (shown != keyboard)
                         {
@@ -722,7 +442,7 @@ public class Editor extends Activity
                             {
                                 textView.removeCallbacks(updateHighlight);
                                 textView.postDelayed(updateHighlight,
-                                                     UPDATE_DELAY);
+                                                     Constants.UPDATE_DELAY);
                             }
 
                             keyboard = shown;
@@ -741,7 +461,7 @@ public class Editor extends Activity
                     if (updateHighlight != null)
                     {
                         textView.removeCallbacks(updateHighlight);
-                        textView.postDelayed(updateHighlight, UPDATE_DELAY);
+                        textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
                     }
                 });
 
@@ -753,7 +473,7 @@ public class Editor extends Activity
                     if (updateHighlight != null)
                     {
                         textView.removeCallbacks(updateHighlight);
-                        textView.postDelayed(updateHighlight, UPDATE_DELAY);
+                        textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
                     }
                 });
         }
@@ -765,12 +485,7 @@ public class Editor extends Activity
     {
         super.onRestoreInstanceState(savedInstanceState);
 
-        path = savedInstanceState.getString(PATH);
-        edit = savedInstanceState.getBoolean(EDIT);
-        changed = savedInstanceState.getBoolean(CHANGED);
-        match = savedInstanceState.getString(MATCH);
-        modified = savedInstanceState.getLong(MODIFIED);
-        content = savedInstanceState.getParcelable(CONTENT);
+        getSavedInstanceValues(savedInstanceState);
         invalidateOptionsMenu();
 
         file = new File(path);
@@ -783,19 +498,23 @@ public class Editor extends Activity
             setTitle(uri.getLastPathSegment());
 
         if (match == null)
-            match = UTF_8;
+            match = Constants.UTF_8;
         getActionBar().setSubtitle(match);
 
         checkHighlight();
 
         if (file.lastModified() > modified)
             alertDialog(R.string.appName, R.string.changedReload,
-                        R.string.reload, R.string.cancel, (dialog, id) ->
-        {
-            if (id == DialogInterface.BUTTON_POSITIVE) {
-                readFile(uri);
-            }
-        });
+                        R.string.reload, R.string.cancel, this::onClick);
+    }
+
+    private void getSavedInstanceValues(Bundle savedInstanceState) {
+        path = savedInstanceState.getString(Constants.PATH);
+        edit = savedInstanceState.getBoolean(Constants.EDIT);
+        changed = savedInstanceState.getBoolean(Constants.CHANGED);
+        match = savedInstanceState.getString(Constants.MATCH);
+        modified = savedInstanceState.getLong(Constants.MODIFIED);
+        content = savedInstanceState.getParcelable(Constants.CONTENT);
     }
 
     // onPause
@@ -815,17 +534,17 @@ public class Editor extends Activity
             PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putBoolean(PREF_SAVE, save);
-        editor.putBoolean(PREF_VIEW, view);
-        editor.putBoolean(PREF_WRAP, wrap);
-        editor.putBoolean(PREF_SUGGEST, suggest);
-        editor.putBoolean(PREF_HIGHLIGHT, highlight);
-        editor.putInt(PREF_THEME, theme);
-        editor.putInt(PREF_SIZE, size);
-        editor.putInt(PREF_TYPE, type);
+        editor.putBoolean(Constants.PREF_SAVE, save);
+        editor.putBoolean(Constants.PREF_VIEW, view);
+        editor.putBoolean(Constants.PREF_WRAP, wrap);
+        editor.putBoolean(Constants.PREF_SUGGEST, suggest);
+        editor.putBoolean(Constants.PREF_HIGHLIGHT, highlight);
+        editor.putInt(Constants.PREF_THEME, theme);
+        editor.putInt(Constants.PREF_SIZE, size);
+        editor.putInt(Constants.PREF_TYPE, type);
 
         // Add the set of recent files
-        editor.putStringSet(PREF_PATHS, pathMap.keySet());
+        editor.putStringSet(Constants.PREF_PATHS, pathMap.keySet());
 
         // Add a position for each file
         for (String path : pathMap.keySet())
@@ -848,12 +567,12 @@ public class Editor extends Activity
     {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable(CONTENT, content);
-        outState.putLong(MODIFIED, modified);
-        outState.putBoolean(CHANGED, changed);
-        outState.putString(MATCH, match);
-        outState.putBoolean(EDIT, edit);
-        outState.putString(PATH, path);
+        outState.putParcelable(Constants.CONTENT, content);
+        outState.putLong(Constants.MODIFIED, modified);
+        outState.putBoolean(Constants.CHANGED, changed);
+        outState.putString(Constants.MATCH, match);
+        outState.putBoolean(Constants.EDIT, edit);
+        outState.putString(Constants.PATH, path);
     }
 
     // onCreateOptionsMenu
@@ -898,45 +617,45 @@ public class Editor extends Activity
 
         switch (theme)
         {
-        case LIGHT:
+        case Constants.LIGHT:
             menu.findItem(R.id.light).setChecked(true);
             break;
 
-        case DARK:
+        case Constants.DARK:
             menu.findItem(R.id.dark).setChecked(true);
             break;
 
-        case BLACK:
+        case Constants.BLACK:
             menu.findItem(R.id.black).setChecked(true);
             break;
 
-        case RETRO:
+        case Constants.RETRO:
             menu.findItem(R.id.retro).setChecked(true);
             break;
         }
 
         switch (size)
         {
-        case SMALL:
+        case Constants.SMALL:
             menu.findItem(R.id.small).setChecked(true);
             break;
 
-        case MEDIUM:
+        case Constants.MEDIUM:
             menu.findItem(R.id.medium).setChecked(true);
             break;
 
-        case LARGE:
+        case Constants.LARGE:
             menu.findItem(R.id.large).setChecked(true);
             break;
         }
 
         switch (type)
         {
-        case MONO:
+        case Constants.MONO:
             menu.findItem(R.id.mono).setChecked(true);
             break;
 
-        case NORMAL:
+        case Constants.NORMAL:
             menu.findItem(R.id.normal).setChecked(true);
             break;
         }
@@ -986,7 +705,7 @@ public class Editor extends Activity
                                   .getPath() + File.separator, "");
             // Create item
             sub.add(Menu.NONE, R.id.fileItem, Menu.NONE, TextUtils.ellipsize
-                    (name, new TextPaint(), MENU_SIZE,
+                    (name, new TextPaint(), Constants.MENU_SIZE,
                      TextUtils.TruncateAt.MIDDLE))
                 // Use condensed title to save path as API doesn't
                 // work as documented
@@ -1131,12 +850,12 @@ public class Editor extends Activity
 
         switch (requestCode)
         {
-        case OPEN_DOCUMENT:
+        case Constants.OPEN_DOCUMENT:
             content = data.getData();
             readFile(content);
             break;
 
-        case CREATE_DOCUMENT:
+        case Constants.CREATE_DOCUMENT:
             content = data.getData();
             setTitle(FileUtils.getDisplayName(this, content, null, null));
             saveFile();
@@ -1222,12 +941,12 @@ public class Editor extends Activity
 
         // Change size and typeface temporarily as workaround for yet
         // another obscure feature of some versions of android
-        textView.setTextSize((size == TINY)? HUGE: TINY);
+        textView.setTextSize((size == Constants.TINY)? Constants.HUGE: Constants.TINY);
         textView.setTextSize(size);
-        textView.setTypeface((type == NORMAL)?
+        textView.setTypeface((type == Constants.NORMAL)?
                              Typeface.MONOSPACE:
                              Typeface.DEFAULT, Typeface.NORMAL);
-        textView.setTypeface((type == NORMAL)?
+        textView.setTypeface((type == Constants.NORMAL)?
                              Typeface.DEFAULT:
                              Typeface.MONOSPACE, Typeface.NORMAL);
         // Update boolean
@@ -1297,7 +1016,7 @@ public class Editor extends Activity
         path = uri.getPath();
 
         setTitle(uri.getLastPathSegment());
-        match = UTF_8;
+        match = Constants.UTF_8;
         getActionBar().setSubtitle(match);
     }
 
@@ -1305,16 +1024,16 @@ public class Editor extends Activity
     private File getNewFile()
     {
         File documents = new
-            File(Environment.getExternalStorageDirectory(), DOCUMENTS);
-        return new File(documents, NEW_FILE);
+            File(Environment.getExternalStorageDirectory(), Constants.DOCUMENTS);
+        return new File(documents, Constants.NEW_FILE);
     }
 
     // getDefaultFile
     private File getDefaultFile()
     {
         File documents = new
-            File(Environment.getExternalStorageDirectory(), DOCUMENTS);
-        return new File(documents, EDIT_FILE);
+            File(Environment.getExternalStorageDirectory(), Constants.DOCUMENTS);
+        return new File(documents, Constants.EDIT_FILE);
     }
 
     // defaultFile
@@ -1331,7 +1050,7 @@ public class Editor extends Activity
         else
         {
             setTitle(uri.getLastPathSegment());
-            match = UTF_8;
+            match = Constants.UTF_8;
             getActionBar().setSubtitle(match);
         }
     }
@@ -1403,7 +1122,7 @@ public class Editor extends Activity
             String name = map.get(date);
 
             // Remove old files
-            if (count >= MAX_PATHS)
+            if (count >= Constants.MAX_PATHS)
             {
                 pathMap.remove(name);
                 removeList.add(name);
@@ -1492,10 +1211,10 @@ public class Editor extends Activity
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
                 {
                     Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-                    intent.setType(TEXT_WILD);
+                    intent.setType(Constants.TEXT_WILD);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.putExtra(Intent.EXTRA_TITLE, uri.getLastPathSegment());
-                    startActivityForResult(intent, CREATE_DOCUMENT);
+                    startActivityForResult(intent, Constants.CREATE_DOCUMENT);
                 }
                 break;
             }
@@ -1557,15 +1276,15 @@ public class Editor extends Activity
 
         String html = renderer.render(document);
 
-        File file = new File(getCacheDir(), HTML_FILE);
+        File file = new File(getCacheDir(), Constants.HTML_FILE);
         file.deleteOnExit();
 
         try (FileWriter writer = new FileWriter(file))
         {
             // Add HTML header and footer to make a valid page.
-            writer.write(HTML_HEAD);
+            writer.write(Constants.HTML_HEAD);
             writer.write(html);
-            writer.write(HTML_TAIL);
+            writer.write(Constants.HTML_TAIL);
         }
 
         catch (Exception e)
@@ -1577,9 +1296,9 @@ public class Editor extends Activity
         {
             // Get file provider uri
             Uri uri = FileProvider.getUriForFile
-                (this, FILE_PROVIDER, file);
+                (this, Constants.FILE_PROVIDER, file);
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, TEXT_HTML);
+            intent.setDataAndType(uri, Constants.TEXT_HTML);
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivity(intent);
         }
@@ -1640,7 +1359,7 @@ public class Editor extends Activity
     // lightClicked
     private void lightClicked(MenuItem item)
     {
-        theme = LIGHT;
+        theme = Constants.LIGHT;
         item.setChecked(true);
 	recreate(this);
     }
@@ -1648,7 +1367,7 @@ public class Editor extends Activity
     // darkClicked
     private void darkClicked(MenuItem item)
     {
-        theme = DARK;
+        theme = Constants.DARK;
         item.setChecked(true);
 	recreate(this);
     }
@@ -1656,7 +1375,7 @@ public class Editor extends Activity
     // blackClicked
     private void blackClicked(MenuItem item)
     {
-        theme = BLACK;
+        theme = Constants.BLACK;
         item.setChecked(true);
 	recreate(this);
     }
@@ -1664,7 +1383,7 @@ public class Editor extends Activity
     // retroClicked
     private void retroClicked(MenuItem item)
     {
-        theme = RETRO;
+        theme = Constants.RETRO;
         item.setChecked(true);
 	recreate(this);
     }
@@ -1672,7 +1391,7 @@ public class Editor extends Activity
     // smallClicked
     private void smallClicked(MenuItem item)
     {
-        size = SMALL;
+        size = Constants.SMALL;
         item.setChecked(true);
 
         textView.setTextSize(size);
@@ -1681,7 +1400,7 @@ public class Editor extends Activity
     // mediumClicked
     private void mediumClicked(MenuItem item)
     {
-        size = MEDIUM;
+        size = Constants.MEDIUM;
         item.setChecked(true);
 
         textView.setTextSize(size);
@@ -1690,7 +1409,7 @@ public class Editor extends Activity
     // largeClicked
     private void largeClicked(MenuItem item)
     {
-        size = LARGE;
+        size = Constants.LARGE;
         item.setChecked(true);
 
         textView.setTextSize(size);
@@ -1699,7 +1418,7 @@ public class Editor extends Activity
     // monoClicked
     private void monoClicked(MenuItem item)
     {
-        type = MONO;
+        type = Constants.MONO;
         item.setChecked(true);
 
         textView.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
@@ -1708,7 +1427,7 @@ public class Editor extends Activity
     // normalClicked
     private void normalClicked(MenuItem item)
     {
-        type = NORMAL;
+        type = Constants.NORMAL;
         item.setChecked(true);
 
         textView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
@@ -1723,11 +1442,11 @@ public class Editor extends Activity
         // Set type
         switch (type)
         {
-        case MONO:
+        case Constants.MONO:
             textView.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
             break;
 
-        case NORMAL:
+        case Constants.NORMAL:
             textView.setTypeface(Typeface.DEFAULT, Typeface.NORMAL);
             break;
         }
@@ -1814,7 +1533,7 @@ public class Editor extends Activity
             {
                 requestPermissions(new String[]
                     {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                     Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_OPEN);
+                     Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.REQUEST_OPEN);
                 return;
             }
         }
@@ -1843,16 +1562,16 @@ public class Editor extends Activity
             {
                 // Use storage
                 Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.setType(TEXT_WILD);
+                intent.setType(Constants.TEXT_WILD);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent, OPEN_DOCUMENT);
+                startActivityForResult(intent, Constants.OPEN_DOCUMENT);
                 return;
             }
 
-            if (FOLDER_OFFSET <= which)
+            if (Constants.FOLDER_OFFSET <= which)
             {
                 File file = new File(File.separator);
-                for (int i = 0; i <= which - FOLDER_OFFSET; i++)
+                for (int i = 0; i <= which - Constants.FOLDER_OFFSET; i++)
                     file = new File(file, dirList.get(i));
                 if (file.isDirectory())
                     getFile(file);
@@ -1918,7 +1637,7 @@ public class Editor extends Activity
                             DialogInterface.OnClickListener listener)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(FOLDER);
+        builder.setTitle(Constants.FOLDER);
 
         // Add the adapter
         FileAdapter adapter = new FileAdapter(builder.getContext(), fileList);
@@ -1952,7 +1671,7 @@ public class Editor extends Activity
         for (String dir: dirList)
         {
             Button button = new Button(dialog.getContext());
-            button.setId(dirList.indexOf(dir) + FOLDER_OFFSET);
+            button.setId(dirList.indexOf(dir) + Constants.FOLDER_OFFSET);
             button.setText(dir);
             button.setOnClickListener((v) ->
             {
@@ -1964,7 +1683,7 @@ public class Editor extends Activity
 
         // Scroll to the end
         scroll.postDelayed(() ->
-                scroll.fullScroll(View.FOCUS_RIGHT), POSITION_DELAY);
+                scroll.fullScroll(View.FOCUS_RIGHT), Constants.POSITION_DELAY);
     }
 
     // onRequestPermissionsResult
@@ -1975,7 +1694,7 @@ public class Editor extends Activity
     {
         switch (requestCode)
         {
-        case REQUEST_SAVE:
+        case Constants.REQUEST_SAVE:
             for (int i = 0; i < grantResults.length; i++)
                 if (permissions[i].equals(Manifest.permission
                                           .WRITE_EXTERNAL_STORAGE) &&
@@ -1984,7 +1703,7 @@ public class Editor extends Activity
                     saveFile();
             break;
 
-        case REQUEST_READ:
+        case Constants.REQUEST_READ:
             for (int i = 0; i < grantResults.length; i++)
                 if (permissions[i].equals(Manifest.permission
                                           .READ_EXTERNAL_STORAGE) &&
@@ -1993,7 +1712,7 @@ public class Editor extends Activity
                     readFile(uri);
             break;
 
-        case REQUEST_OPEN:
+        case Constants.REQUEST_OPEN:
             for (int i = 0; i < grantResults.length; i++)
                 if (permissions[i].equals(Manifest.permission
                                           .READ_EXTERNAL_STORAGE) &&
@@ -2017,14 +1736,14 @@ public class Editor extends Activity
             {
                 requestPermissions(new String[]
                     {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                     Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ);
+                     Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.REQUEST_READ);
                 this.uri = uri;
                 return;
             }
         }
 
         long size;
-        if (CONTENT.equalsIgnoreCase(uri.getScheme()))
+        if (Constants.CONTENT.equalsIgnoreCase(uri.getScheme()))
             size = FileUtils.getSize(this, uri, null, null);
 
         else
@@ -2036,7 +1755,7 @@ public class Editor extends Activity
         if (BuildConfig.DEBUG)
             Log.d(TAG, "Size " + size);
 
-        if (size > TOO_LARGE)
+        if (size > Constants.TOO_LARGE)
         {
             String large = getString(R.string.tooLarge);
             large = String.format(large, FileUtils.getReadableFileSize(size));
@@ -2052,7 +1771,7 @@ public class Editor extends Activity
             Log.d(TAG, "Uri: " + uri);
 
         // Attempt to resolve content uri
-        if (CONTENT.equalsIgnoreCase(uri.getScheme()))
+        if (Constants.CONTENT.equalsIgnoreCase(uri.getScheme()))
         {
             content = uri;
             uri = resolveContent(uri);
@@ -2065,7 +1784,7 @@ public class Editor extends Activity
             Log.d(TAG, "Uri: " + uri);
 
         // Read into new file if unresolved
-        if (CONTENT.equalsIgnoreCase(uri.getScheme()))
+        if (Constants.CONTENT.equalsIgnoreCase(uri.getScheme()))
         {
             file = getNewFile();
             Uri defaultUri = Uri.fromFile(file);
@@ -2132,7 +1851,7 @@ public class Editor extends Activity
             {
                 requestPermissions(new String[]
                     {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                     Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_SAVE);
+                     Manifest.permission.READ_EXTERNAL_STORAGE}, Constants.REQUEST_SAVE);
                 return;
             }
         }
@@ -2192,7 +1911,7 @@ public class Editor extends Activity
     {
         file.getParentFile().mkdirs();
 
-        String charset = UTF_8;
+        String charset = Constants.UTF_8;
         if (match != null && !match.equals(getString(R.string.detect)))
             charset = match;
 
@@ -2219,7 +1938,7 @@ public class Editor extends Activity
     // write
     private void write(CharSequence text, OutputStream os)
     {
-        String charset = UTF_8;
+        String charset = Constants.UTF_8;
         if (match != null && !match.equals(getString(R.string.detect)))
             charset = match;
 
@@ -2245,7 +1964,7 @@ public class Editor extends Activity
     private void checkHighlight()
     {
         // No syntax
-        syntax = NO_SYNTAX;
+        syntax = Constants.NO_SYNTAX;
 
         // Check extension
         if (highlight && file != null)
@@ -2255,38 +1974,38 @@ public class Editor extends Activity
             {
                 String type = FileUtils.getMimeType(file);
 
-                if (ext.matches(CC_EXT))
-                    syntax = CC_SYNTAX;
+                if (ext.matches(Constants.CC_EXT))
+                    syntax = Constants.CC_SYNTAX;
 
-                else if (ext.matches(HTML_EXT))
-                    syntax = HTML_SYNTAX;
+                else if (ext.matches(Constants.HTML_EXT))
+                    syntax = Constants.HTML_SYNTAX;
 
-                else if (ext.matches(CSS_EXT))
-                    syntax = CSS_SYNTAX;
+                else if (ext.matches(Constants.CSS_EXT))
+                    syntax = Constants.CSS_SYNTAX;
 
-                else if (ext.matches(ORG_EXT))
-                    syntax = ORG_SYNTAX;
+                else if (ext.matches(Constants.ORG_EXT))
+                    syntax = Constants.ORG_SYNTAX;
 
-                else if (ext.matches(MD_EXT))
-                    syntax = MD_SYNTAX;
+                else if (ext.matches(Constants.MD_EXT))
+                    syntax = Constants.MD_SYNTAX;
 
-                else if (ext.matches(SH_EXT))
-                    syntax = SH_SYNTAX;
+                else if (ext.matches(Constants.SH_EXT))
+                    syntax = Constants.SH_SYNTAX;
 
-                else if (!TEXT_PLAIN.equals(type))
-                    syntax = DEF_SYNTAX;
+                else if (!Constants.TEXT_PLAIN.equals(type))
+                    syntax = Constants.DEF_SYNTAX;
 
                 else
-                    syntax = NO_SYNTAX;
+                    syntax = Constants.NO_SYNTAX;
 
                 // Add callback
-                if (textView != null && syntax != NO_SYNTAX)
+                if (textView != null && syntax != Constants.NO_SYNTAX)
                 {
                     if (updateHighlight == null)
                         updateHighlight = this::highlightText;
 
                     textView.removeCallbacks(updateHighlight);
-                    textView.postDelayed(updateHighlight, UPDATE_DELAY);
+                    textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
 
                     return;
                 }
@@ -2297,7 +2016,7 @@ public class Editor extends Activity
         if (updateHighlight != null)
         {
             textView.removeCallbacks(updateHighlight);
-            textView.postDelayed(updateHighlight, UPDATE_DELAY);
+            textView.postDelayed(updateHighlight, Constants.UPDATE_DELAY);
 
             updateHighlight = null;
         }
@@ -2340,7 +2059,7 @@ public class Editor extends Activity
 
         switch (syntax)
         {
-        case NO_SYNTAX:
+        case Constants.NO_SYNTAX:
             // Get current spans
             spans = editable.getSpans(0, editable.length(),
                                       ForegroundColorSpan.class);
@@ -2349,8 +2068,8 @@ public class Editor extends Activity
                 editable.removeSpan(span);
             break;
 
-        case CC_SYNTAX:
-            matcher = KEYWORDS.matcher(editable);
+        case Constants.CC_SYNTAX:
+            matcher = Constants.KEYWORDS.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2362,7 +2081,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(TYPES);
+            matcher.region(start, end).usePattern(Constants.TYPES);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2373,7 +2092,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CLASS);
+            matcher.region(start, end).usePattern(Constants.CLASS);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2384,7 +2103,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(NUMBER);
+            matcher.region(start, end).usePattern(Constants.NUMBER);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2395,7 +2114,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(ANNOTATION);
+            matcher.region(start, end).usePattern(Constants.ANNOTATION);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2406,7 +2125,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CONSTANT);
+            matcher.region(start, end).usePattern(Constants.CONSTANT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2417,7 +2136,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(OPERATOR);
+            matcher.region(start, end).usePattern(Constants.OPERATOR);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2428,7 +2147,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CC_COMMENT);
+            matcher.region(start, end).usePattern(Constants.CC_COMMENT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2440,8 +2159,8 @@ public class Editor extends Activity
             }
             break;
 
-        case HTML_SYNTAX:
-            matcher = HTML_TAGS.matcher(editable);
+        case Constants.HTML_SYNTAX:
+            matcher = Constants.HTML_TAGS.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2453,7 +2172,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(HTML_ATTRS);
+            matcher.region(start, end).usePattern(Constants.HTML_ATTRS);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2464,7 +2183,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(QUOTED);
+            matcher.region(start, end).usePattern(Constants.QUOTED);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2475,7 +2194,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(HTML_COMMENT);
+            matcher.region(start, end).usePattern(Constants.HTML_COMMENT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2487,8 +2206,8 @@ public class Editor extends Activity
             }
             break;
 
-        case CSS_SYNTAX:
-            matcher = CSS_STYLES.matcher(editable);
+        case Constants.CSS_SYNTAX:
+            matcher = Constants.CSS_STYLES.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2500,7 +2219,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CSS_HEX);
+            matcher.region(start, end).usePattern(Constants.CSS_HEX);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2511,7 +2230,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CC_COMMENT);
+            matcher.region(start, end).usePattern(Constants.CC_COMMENT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2523,8 +2242,8 @@ public class Editor extends Activity
             }
             break;
 
-        case ORG_SYNTAX:
-            matcher = ORG_HEADER.matcher(editable);
+        case Constants.ORG_SYNTAX:
+            matcher = Constants.ORG_HEADER.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2537,7 +2256,7 @@ public class Editor extends Activity
             }
 
 
-            matcher.region(start, end).usePattern(ORG_EMPH);
+            matcher.region(start, end).usePattern(Constants.ORG_EMPH);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2548,7 +2267,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(ORG_LINK);
+            matcher.region(start, end).usePattern(Constants.ORG_LINK);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2559,7 +2278,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(ORG_COMMENT);
+            matcher.region(start, end).usePattern(Constants.ORG_COMMENT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2571,8 +2290,8 @@ public class Editor extends Activity
             }
             break;
 
-        case MD_SYNTAX:
-            matcher = MD_HEADER.matcher(editable);
+        case Constants.MD_SYNTAX:
+            matcher = Constants.MD_HEADER.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2584,7 +2303,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(MD_LINK);
+            matcher.region(start, end).usePattern(Constants.MD_LINK);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2595,7 +2314,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(MD_EMPH);
+            matcher.region(start, end).usePattern(Constants.MD_EMPH);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2606,7 +2325,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(MD_CODE);
+            matcher.region(start, end).usePattern(Constants.MD_CODE);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2618,8 +2337,8 @@ public class Editor extends Activity
             }
             break;
 
-        case SH_SYNTAX:
-            matcher = KEYWORDS.matcher(editable);
+        case Constants.SH_SYNTAX:
+            matcher = Constants.KEYWORDS.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2631,7 +2350,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(NUMBER);
+            matcher.region(start, end).usePattern(Constants.NUMBER);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2642,7 +2361,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CONSTANT);
+            matcher.region(start, end).usePattern(Constants.CONSTANT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2653,7 +2372,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(SH_VAR);
+            matcher.region(start, end).usePattern(Constants.SH_VAR);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2664,7 +2383,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(OPERATOR);
+            matcher.region(start, end).usePattern(Constants.OPERATOR);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2675,7 +2394,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(QUOTED);
+            matcher.region(start, end).usePattern(Constants.QUOTED);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2686,7 +2405,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(SH_COMMENT);
+            matcher.region(start, end).usePattern(Constants.SH_COMMENT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2698,8 +2417,8 @@ public class Editor extends Activity
             }
             break;
 
-        case DEF_SYNTAX:
-            matcher = KEYWORDS.matcher(editable);
+        case Constants.DEF_SYNTAX:
+            matcher = Constants.KEYWORDS.matcher(editable);
             matcher.region(start, end);
             while (matcher.find())
             {
@@ -2711,7 +2430,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(TYPES);
+            matcher.region(start, end).usePattern(Constants.TYPES);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2722,7 +2441,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CLASS);
+            matcher.region(start, end).usePattern(Constants.CLASS);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2733,7 +2452,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(NUMBER);
+            matcher.region(start, end).usePattern(Constants.NUMBER);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2744,7 +2463,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(CONSTANT);
+            matcher.region(start, end).usePattern(Constants.CONSTANT);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2755,7 +2474,7 @@ public class Editor extends Activity
                                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            matcher.region(start, end).usePattern(QUOTED);
+            matcher.region(start, end).usePattern(Constants.QUOTED);
             while (matcher.find())
             {
                 ForegroundColorSpan span = new
@@ -2773,7 +2492,7 @@ public class Editor extends Activity
     private void wordCountText()
     {
         int words = 0;
-        Matcher matcher = WORD_PATTERN.matcher(textView.getText());
+        Matcher matcher = Constants.WORD_PATTERN.matcher(textView.getText());
         while (matcher.find())
         {
             words++;
@@ -2799,7 +2518,7 @@ public class Editor extends Activity
             // Get the mime type
             String type = FileUtils.getMimeType(file);
             // If the type is not text/plain
-            if (!TEXT_PLAIN.equals(type))
+            if (!Constants.TEXT_PLAIN.equals(type))
             {
                 // Get the start and end of the selection
                 int start = textView.getSelectionStart();
@@ -2809,7 +2528,7 @@ public class Editor extends Activity
 
                 // Get a pattern and a matcher for delimiter
                 // characters
-                Matcher matcher = PATTERN_CHARS.matcher(text);
+                Matcher matcher = Constants.PATTERN_CHARS.matcher(text);
 
                 // Find the first match after the end of the selection
                 if (matcher.find(end))
@@ -2821,7 +2540,7 @@ public class Editor extends Activity
                     char c = text.charAt(end);
 
                     // Check for opening brackets
-                    if (BRACKET_CHARS.indexOf(c) == -1)
+                    if (Constants.BRACKET_CHARS.indexOf(c) == -1)
                     {
                         switch (c)
                         {
@@ -2864,16 +2583,16 @@ public class Editor extends Activity
         boolean change = false;
 
         CharSequence first = text.subSequence
-            (0, Math.min(text.length(), FIRST_SIZE));
+            (0, Math.min(text.length(), Constants.FIRST_SIZE));
         CharSequence last = text.subSequence
-            (Math.max(0, text.length() - LAST_SIZE), text.length());
+            (Math.max(0, text.length() - Constants.LAST_SIZE), text.length());
         for (CharSequence sequence: new CharSequence[]{first, last})
         {
-            Matcher matcher = MODE_PATTERN.matcher(sequence);
+            Matcher matcher = Constants.MODE_PATTERN.matcher(sequence);
             if (matcher.find())
             {
                 matcher.region(matcher.start(1), matcher.end(1));
-                matcher.usePattern(OPTION_PATTERN);
+                matcher.usePattern(Constants.OPTION_PATTERN);
                 while (matcher.find())
                 {
                     boolean no = "no".equals(matcher.group(2));
@@ -2918,36 +2637,36 @@ public class Editor extends Activity
                     {
                         if (":l".equals(matcher.group(4)))
                         {
-                            if (theme != LIGHT)
+                            if (theme != Constants.LIGHT)
                             {
-                                theme = LIGHT;
+                                theme = Constants.LIGHT;
                                 change = true;
                             }
                         }
 
                         else if (":d".equals(matcher.group(4)))
                         {
-                            if (theme != DARK)
+                            if (theme != Constants.DARK)
                             {
-                                theme = DARK;
+                                theme = Constants.DARK;
                                 change = true;
                             }
                         }
 
                         else if (":b".equals(matcher.group(4)))
                         {
-                            if (theme != BLACK)
+                            if (theme != Constants.BLACK)
                             {
-                                theme = BLACK;
+                                theme = Constants.BLACK;
                                 change = true;
                             }
                         }
 
                         else if (":r".equals(matcher.group(4)))
                         {
-                            if (theme != RETRO)
+                            if (theme != Constants.RETRO)
                             {
-                                theme = RETRO;
+                                theme = Constants.RETRO;
                                 change = true;
                             }
                         }
@@ -2957,27 +2676,27 @@ public class Editor extends Activity
                     {
                         if (":l".equals(matcher.group(4)))
                         {
-                            if (size != LARGE)
+                            if (size != Constants.LARGE)
                             {
-                                size = LARGE;
+                                size = Constants.LARGE;
                                 textView.setTextSize(size);
                             }
                         }
 
                         else if (":m".equals(matcher.group(4)))
                         {
-                            if (size != MEDIUM)
+                            if (size != Constants.MEDIUM)
                             {
-                                size = MEDIUM;
+                                size = Constants.MEDIUM;
                                 textView.setTextSize(size);
                             }
                         }
 
                         else if (":s".equals(matcher.group(4)))
                         {
-                            if (size != SMALL)
+                            if (size != Constants.SMALL)
                             {
-                                size = SMALL;
+                                size = Constants.SMALL;
                                 textView.setTextSize(size);
                             }
                         }
@@ -2987,9 +2706,9 @@ public class Editor extends Activity
                     {
                         if (":m".equals(matcher.group(4)))
                         {
-                            if (type != MONO)
+                            if (type != Constants.MONO)
                             {
-                                type = MONO;
+                                type = Constants.MONO;
                                 textView.setTypeface
                                     (Typeface.MONOSPACE, Typeface.NORMAL);
                             }
@@ -2997,9 +2716,9 @@ public class Editor extends Activity
 
                         else if (":p".equals(matcher.group(4)))
                         {
-                            if (type != NORMAL)
+                            if (type != Constants.NORMAL)
                             {
-                                type = NORMAL;
+                                type = Constants.NORMAL;
                                 textView.setTypeface
                                     (Typeface.DEFAULT, Typeface.NORMAL);
                             }
@@ -3010,7 +2729,7 @@ public class Editor extends Activity
                     {
                         if (":u".equals(matcher.group(4)))
                         {
-                            match = UTF_8;
+                            match = Constants.UTF_8;
                             getActionBar().setSubtitle(match);
                         }
                     }
@@ -3035,11 +2754,11 @@ public class Editor extends Activity
             textView.postDelayed(() ->
                                  scrollView.smoothScrollTo
                                  (0, pathMap.get(path)),
-                                 POSITION_DELAY);
+                                 Constants.POSITION_DELAY);
         else
             textView.postDelayed(() ->
                                  scrollView.smoothScrollTo(0, 0),
-                                 POSITION_DELAY);
+                                 Constants.POSITION_DELAY);
         // Check mode
         checkMode(text);
 
@@ -3068,10 +2787,10 @@ public class Editor extends Activity
 
             // Change typeface temporarily as workaround for yet another
             // obscure feature of some versions of android
-            textView.setTypeface((type == NORMAL)?
+            textView.setTypeface((type == Constants.NORMAL)?
                                  Typeface.MONOSPACE:
                                  Typeface.DEFAULT, Typeface.NORMAL);
-            textView.setTypeface((type == NORMAL)?
+            textView.setTypeface((type == Constants.NORMAL)?
                                  Typeface.DEFAULT:
                                  Typeface.MONOSPACE, Typeface.NORMAL);
             // Update boolean
@@ -3083,6 +2802,12 @@ public class Editor extends Activity
 
         // Update menu
         invalidateOptionsMenu();
+    }
+
+    private void onClick(DialogInterface dialog, int id) {
+        if (id == DialogInterface.BUTTON_POSITIVE) {
+            readFile(uri);
+        }
     }
 
     // QueryTextListener
@@ -3220,7 +2945,7 @@ public class Editor extends Activity
         public boolean onScale(ScaleGestureDetector detector)
         {
             size *= detector.getScaleFactor();
-            size = Math.max(TINY, Math.min(size, HUGE));
+            size = Math.max(Constants.TINY, Math.min(size, Constants.HUGE));
             textView.setTextSize(size);
             invalidateOptionsMenu();
 
@@ -3324,7 +3049,7 @@ public class Editor extends Activity
                     // disappears I have no idea or why I have to
                     // do it after a delay
                     editor.searchView.postDelayed(() ->
-                      editor.searchView.setQuery(search, false), FIND_DELAY);
+                      editor.searchView.setQuery(search, false), Constants.FIND_DELAY);
                 });
             }
 
@@ -3356,7 +3081,7 @@ public class Editor extends Activity
             // Default UTF-8
             if (editor.match == null)
             {
-                editor.match = UTF_8;
+                editor.match = Constants.UTF_8;
                 editor.runOnUiThread(() ->
                     editor.getActionBar().setSubtitle(editor.match));
             }
@@ -3370,7 +3095,7 @@ public class Editor extends Activity
                 {
                     // Detect charset, using UTF-8 hint
                     CharsetMatch match = new
-                        CharsetDetector().setDeclaredEncoding(UTF_8)
+                        CharsetDetector().setDeclaredEncoding(Constants.UTF_8)
                         .setText(in).detect();
 
                     if (match != null)

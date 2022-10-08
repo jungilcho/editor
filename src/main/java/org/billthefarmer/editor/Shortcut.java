@@ -59,7 +59,7 @@ public class Shortcut extends Activity
     private Intent getShortcut() {
         Intent shortcut = new
             Intent(this, Editor.class);
-        shortcut.setAction(Editor.OPEN_NEW);
+        shortcut.setAction(Constants.OPEN_NEW);
         shortcut.addCategory(Intent.CATEGORY_DEFAULT);
         return shortcut;
     }

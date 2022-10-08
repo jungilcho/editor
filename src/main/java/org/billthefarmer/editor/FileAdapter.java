@@ -45,7 +45,7 @@ public class FileAdapter extends BaseAdapter
 
     private final static String APPLICATION = "application";
 
-    private final static long LARGE = 262144;
+    private final static long LARGE = 256*1024;
 
     private final LayoutInflater inflater;
     private final List<File> files;
